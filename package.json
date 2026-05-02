@@ -1,0 +1,26 @@
+{
+  "name": "timedrop-backend",
+  "version": "1.0.0",
+  "description": "TimeDrop Backend API",
+  "main": "src/index.js",
+  "scripts": {
+    "start":   "node src/index.js",
+    "dev":     "nodemon src/index.js",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "express":        "^4.18.2",
+    "cors":           "^2.8.5",
+    "dotenv":         "^16.4.1",
+    "bcryptjs":       "^2.4.3",
+    "jsonwebtoken":   "^9.0.2",
+    "axios":          "^1.6.7",
+    "morgan":         "^1.10.0",
+    "@prisma/client": "^5.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "prisma":  "^5.10.0"
+  }
+}

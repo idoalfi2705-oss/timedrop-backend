@@ -1,0 +1,92 @@
+// prisma/schema.prisma
+// מסד הנתונים של TimeDrop
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// משתמשים
+model User {
+  id        Int      @id @default(autoincrement())
+  orgCode   String
+  username  String   @unique
+  password  String
+  name      String
+  email     String?
+  phone     String?
+  role      Role     @default(WORKER)
+  avatar    String?
+  area      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leaveRequests LeaveRequest[]
+  deliveries    Delivery[]
+  activityLogs  ActivityLog[]
+}
+
+enum Role {
+  EMPLOYER
+  WORKER
+  CLIENT
+}
+
+// בקשות חופשה / מחלה
+model LeaveRequest {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  user      User          @relation(fields: [userId], references: [id])
+  type      LeaveType
+  date      DateTime
+  status    LeaveStatus   @default(PENDING)
+  note      String?
+  createdAt DateTime      @default(now())
+}
+
+enum LeaveType   { VACATION SICK }
+enum LeaveStatus { PENDING APPROVED REJECTED }
+
+// משלוחים
+model Delivery {
+  id         Int            @id @default(autoincrement())
+  workerId   Int
+  worker     User           @relation(fields: [workerId], references: [id])
+  orderId    String         // מזהה מפריוריטי
+  clientId   String         // מזהה מפריוריטי
+  clientName String
+  address    String
+  status     DeliveryStatus @default(PENDING)
+  scheduledAt DateTime
+  deliveredAt DateTime?
+  notes      String?
+  createdAt  DateTime       @default(now())
+}
+
+enum DeliveryStatus { PENDING ON_THE_WAY DELIVERED FAILED }
+
+// לוג פעילות
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+// התראות
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  type      String   @default("info")
+  createdAt DateTime @default(now())
+}

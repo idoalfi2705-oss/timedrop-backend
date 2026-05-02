@@ -1,6 +1,3 @@
-// prisma/schema.prisma
-// מסד הנתונים של TimeDrop
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// משתמשים
 model User {
   id        Int      @id @default(autoincrement())
   orgCode   String
@@ -37,40 +33,50 @@ enum Role {
   CLIENT
 }
 
-// בקשות חופשה / מחלה
 model LeaveRequest {
-  id        Int           @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   userId    Int
-  user      User          @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
   type      LeaveType
   date      DateTime
-  status    LeaveStatus   @default(PENDING)
+  status    LeaveStatus @default(PENDING)
   note      String?
-  createdAt DateTime      @default(now())
+  createdAt DateTime    @default(now())
 }
 
-enum LeaveType   { VACATION SICK }
-enum LeaveStatus { PENDING APPROVED REJECTED }
+enum LeaveType {
+  VACATION
+  SICK
+}
 
-// משלוחים
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Delivery {
-  id         Int            @id @default(autoincrement())
-  workerId   Int
-  worker     User           @relation(fields: [workerId], references: [id])
-  orderId    String         // מזהה מפריוריטי
-  clientId   String         // מזהה מפריוריטי
-  clientName String
-  address    String
-  status     DeliveryStatus @default(PENDING)
+  id          Int            @id @default(autoincrement())
+  workerId    Int
+  worker      User           @relation(fields: [workerId], references: [id])
+  orderId     String
+  clientId    String
+  clientName  String
+  address     String
+  status      DeliveryStatus @default(PENDING)
   scheduledAt DateTime
   deliveredAt DateTime?
-  notes      String?
-  createdAt  DateTime       @default(now())
+  notes       String?
+  createdAt   DateTime       @default(now())
 }
 
-enum DeliveryStatus { PENDING ON_THE_WAY DELIVERED FAILED }
+enum DeliveryStatus {
+  PENDING
+  ON_THE_WAY
+  DELIVERED
+  FAILED
+}
 
-// לוג פעילות
 model ActivityLog {
   id        Int      @id @default(autoincrement())
   userId    Int
@@ -80,7 +86,6 @@ model ActivityLog {
   createdAt DateTime @default(now())
 }
 
-// התראות
 model Notification {
   id        Int      @id @default(autoincrement())
   userId    Int

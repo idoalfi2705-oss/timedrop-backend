@@ -17,10 +17,10 @@
     "jsonwebtoken":   "^9.0.2",
     "axios":          "^1.6.7",
     "morgan":         "^1.10.0",
-    "@prisma/client": "^5.10.0"
+    "@prisma/client": "^5.10.0",
+    "prisma":         "^5.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3",
-    "prisma":  "^5.10.0"
+    "nodemon": "^3.0.3"
   }
 }
